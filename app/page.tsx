@@ -1,65 +1,126 @@
-import Image from "next/image";
+'use client';
+
+import { Canvas } from '@react-three/fiber';
+import LiquidLogo from './components/LiquidLogo';
+import GridBackground from './components/GridBackground';
+import TraitGallery from './components/TraitGallery';
+import Documentation from './Documentation';
+import Footer from './components/Footer';
+import { useState, useEffect } from 'react';
 
 export default function Home() {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) return null;
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <>
+      {/* 1. THE ART BACKGROUND: Locked to the back */}
+      <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: -1 }}>
+        <Canvas camera={{ position: [0, 0, 8], fov: 50 }}>
+          <ambientLight intensity={1} />
+          <GridBackground />
+        </Canvas>
+      </div>
+
+      {/* 2. BAYC HERO FOREGROUND */}
+      <div className="hero-section" style={{ position: 'relative', width: '100vw', height: '100vh' }}>
+        
+        {/* LOGO CANVAS */}
+        <div style={{ position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none' }}>
+          <Canvas camera={{ position: [0, 0, 8], fov: 50 }}>
+             <ambientLight intensity={1} />
+             <group scale={1.0}>
+               <LiquidLogo imageUrl="/assets/void-busts-logo.png" />
+             </group>
+          </Canvas>
+        </div>
+
+        {/* PROJECT LAW / MANIFESTO TEXT */}
+        <div style={{ 
+          position: 'absolute', 
+          top: '60%', 
+          left: '50%', 
+          transform: 'translateX(-50%)', 
+          zIndex: 5, 
+          textAlign: 'center',
+          width: '80%',
+          maxWidth: '500px',
+          pointerEvents: 'none'
+        }}>
+          <p style={{ 
+            fontFamily: 'Helvetica Neue, sans-serif', 
+            fontSize: '10px', 
+            letterSpacing: '2px', 
+            color: 'var(--bayc-gray)',
+            textTransform: 'uppercase',
+            lineHeight: '1.6'
+          }}>
+            1,111 cryptographic artifacts forged in absolute isolation. The 5 rarity tiers dictate the permanent weight of the void.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+
+        {/* NAVIGATION */}
+        <nav style={{ position: 'absolute', top: 0, width: '100%', zIndex: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '2rem' }}>
+          <div></div>
+
+          {/* Center Logo Crest */}
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+            <img src="/assets/logo-crest.png" alt="Void Busts Crest" className="w-8 h-8 object-contain" />
+          </div>
+
+          {/* Top-Right Mint Button */}
+          <div>
+            <a href="#" className="font-mono text-xs uppercase tracking-widest text-white border border-neutral-800 bg-black/60 px-4 py-2 hover:border-white transition-colors">
+              Become A Member, Mint A Bust
+            </a>
+          </div>
+        </nav>
+
+        {/* HERO FOOTER */}
+        <footer style={{ position: 'absolute', bottom: 0, width: '100%', zIndex: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '2rem' }}>
+          <div className="font-mono text-xs text-neutral-400">© VOID BUSTS 2026</div>
+          
+          <div className="footer-links flex items-center gap-6 font-mono text-xs">
+            {/* Perfectly aligned X & Discord Social Icons */}
+            <div className="flex items-center gap-5">
+              {/* X (Twitter) Icon */}
+              <a href="https://x.com/thevoidbusts" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors" aria-label="X (Twitter)">
+                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+              </a>
+
+              {/* Discord Icon */}
+              <a href="https://discord.gg/voidbusts" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors" aria-label="Discord">
+                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                  <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.927 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </footer>
+
+      </div>
+
+      {/* 3. TRAIT GALLERY */}
+      <div style={{ position: 'relative', zIndex: 10 }}>
+        <TraitGallery />
+      </div>
+
+      {/* 4. DOCUMENTATION & WHITEPAPER */}
+      <div style={{ position: 'relative', zIndex: 10 }}>
+        <Documentation />
+      </div>
+
+      {/* 5. MAIN SITE FOOTER */}
+      <div style={{ position: 'relative', zIndex: 10 }}>
+        <Footer />
+      </div>
+    </>
   );
 }
