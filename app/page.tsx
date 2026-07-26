@@ -10,31 +10,57 @@ import { useState, useEffect } from 'react';
 
 export default function Home() {
   const [isMounted, setIsMounted] = useState(false);
+  const [logoScale, setLogoScale] = useState(1.0);
 
   useEffect(() => {
     setIsMounted(true);
+
+    // Responsive scaling logic for the 3D Logo
+    const handleResize = () => {
+      const width = window.innerWidth;
+      
+      if (width > 1024) {
+        // Desktop
+        setLogoScale(1.0);
+      } else if (width > 640 && width <= 1024) {
+        // Tablet (Adjust this value if it's still cut off! Try 0.75 to 0.85)
+        setLogoScale(0.75); 
+      } else {
+        // Mobile
+        setLogoScale(0.5); 
+      }
+    };
+
+    // Run once on mount to set initial scale
+    handleResize(); 
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   if (!isMounted) return null;
 
   return (
     <>
-      {/* 1. THE ART BACKGROUND: Locked to the back */}
-      <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: -1 }}>
+      {/* 1. THE ART BACKGROUND: Locked to the back 
+          FIX: Changed 100vw -> 100% and 100vh -> 100dvh to prevent scrollbars and cutoff */}
+      <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100dvh', zIndex: -1, pointerEvents: 'none' }}>
         <Canvas camera={{ position: [0, 0, 8], fov: 50 }}>
           <ambientLight intensity={1} />
           <GridBackground />
         </Canvas>
       </div>
 
-      {/* 2. BAYC HERO FOREGROUND */}
-      <div className="hero-section" style={{ position: 'relative', width: '100vw', height: '100vh' }}>
+      {/* 2. BAYC HERO FOREGROUND 
+          FIX: Used 100dvh for true dynamic device height */}
+      <div className="hero-section" style={{ position: 'relative', width: '100%', height: '100dvh', overflow: 'hidden' }}>
         
         {/* LOGO CANVAS */}
         <div style={{ position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none' }}>
           <Canvas camera={{ position: [0, 0, 8], fov: 50 }}>
              <ambientLight intensity={1} />
-             <group scale={1.0}>
+             {/* FIX: Applied dynamic scale state here */}
+             <group scale={logoScale}>
                <LiquidLogo imageUrl="/assets/void-busts-logo.png" />
              </group>
           </Canvas>
@@ -43,12 +69,12 @@ export default function Home() {
         {/* PROJECT LAW / MANIFESTO TEXT */}
         <div style={{ 
           position: 'absolute', 
-          top: '60%', 
+          top: '65%', 
           left: '50%', 
           transform: 'translateX(-50%)', 
           zIndex: 5, 
           textAlign: 'center',
-          width: '80%',
+          width: '85%',
           maxWidth: '500px',
           pointerEvents: 'none'
         }}>
@@ -65,28 +91,28 @@ export default function Home() {
         </div>
 
         {/* NAVIGATION */}
-        <nav style={{ position: 'absolute', top: 0, width: '100%', zIndex: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '2rem' }}>
+        <nav className="absolute top-0 w-full z-10 grid grid-cols-3 items-center px-4 sm:px-8 py-6 box-border">
+          {/* Left balance column */}
           <div></div>
 
-          {/* Center Logo Crest */}
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+          {/* Center Logo Crest (True absolute grid centering, never covered) */}
+          <div className="flex justify-center items-center">
             <img src="/assets/logo-crest.png" alt="Void Busts Crest" className="w-8 h-8 object-contain" />
           </div>
 
           {/* Top-Right Mint Button */}
-          <div>
-            <a href="#" className="font-mono text-xs uppercase tracking-widest text-white border border-neutral-800 bg-black/60 px-4 py-2 hover:border-white transition-colors">
-              Become A Member, Mint A Bust
+          <div className="flex justify-end">
+            <a href="#" className="font-mono text-[9px] sm:text-xs uppercase tracking-widest text-white border border-neutral-800 bg-black/60 px-3 sm:px-4 py-2 hover:border-white transition-colors block whitespace-nowrap">
+              Mint A Bust
             </a>
           </div>
         </nav>
 
         {/* HERO FOOTER */}
-        <footer style={{ position: 'absolute', bottom: 0, width: '100%', zIndex: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '2rem' }}>
+        <footer style={{ position: 'absolute', bottom: 0, width: '100%', zIndex: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '2rem', boxSizing: 'border-box' }}>
           <div className="font-mono text-xs text-neutral-400">© VOID BUSTS 2026</div>
           
           <div className="footer-links flex items-center gap-6 font-mono text-xs">
-            {/* Perfectly aligned X & Discord Social Icons */}
             <div className="flex items-center gap-5">
               {/* X (Twitter) Icon */}
               <a href="https://x.com/thevoidbusts" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors" aria-label="X (Twitter)">

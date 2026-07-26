@@ -64,20 +64,22 @@ export default function TraitGallery() {
 
   return (
     <section ref={targetRef} className="relative h-[300vh] text-white bg-transparent">
-      <div className="sticky top-0 flex h-screen items-center overflow-hidden">
+      {/* Changed to h-[100dvh] for perfect mobile/tablet containment */}
+      <div className="sticky top-0 flex h-[100dvh] flex-col justify-center overflow-hidden">
         
         {/* Section Header */}
-        <div className="absolute top-10 left-8 z-20 md:top-14 md:left-14 pointer-events-none">
-          <p className="text-xs font-mono tracking-[0.3em] text-neutral-500 uppercase">
+        <div className="absolute top-10 left-6 z-20 md:top-14 md:left-14 pointer-events-none">
+          <p className="text-[10px] sm:text-xs font-mono tracking-[0.3em] text-neutral-500 uppercase">
             LAYER GENERATION PROTOCOL
           </p>
-          <h2 className="text-2xl font-bold uppercase tracking-wider text-white md:text-4xl">
+          <h2 className="mt-2 text-xl sm:text-2xl font-bold uppercase tracking-wider text-white md:text-4xl">
             5 RARITY CATEGORIES
           </h2>
         </div>
 
-        {/* Horizontal Sliding Cards Track */}
-        <motion.div style={{ x }} className="flex gap-8 pl-8 md:gap-12 md:pl-14 pr-[20vw] pt-16">
+        {/* Horizontal Sliding Cards Track 
+            Added mt-24 to push it down away from the header on smaller screens */}
+        <motion.div style={{ x }} className="flex gap-6 pl-6 sm:gap-8 sm:pl-8 md:gap-12 md:pl-14 pr-[20vw] mt-24 md:mt-32">
           {traits.map((trait) => {
             const isExpanded = activeCardId === trait.id;
 
@@ -85,7 +87,8 @@ export default function TraitGallery() {
               <div
                 key={trait.id}
                 onClick={() => toggleCard(trait.id)}
-                className="group relative flex aspect-square w-[75vw] max-w-[420px] flex-col justify-between border border-neutral-800 bg-neutral-950 p-6 sm:p-8 cursor-pointer overflow-hidden transition-all duration-300 hover:border-white/50 shrink-0 shadow-2xl"
+                // Adjusted responsive widths: Mobile gets 85vw, Tablets get 45vw, Desktop gets max 420px
+                className="group relative flex aspect-square w-[85vw] sm:w-[45vw] md:w-[40vw] lg:w-[30vw] max-w-[420px] flex-col justify-between border border-neutral-800 bg-neutral-950 p-6 sm:p-8 cursor-pointer overflow-hidden transition-all duration-300 hover:border-white/50 shrink-0 shadow-2xl"
               >
                 
                 {/* 1. WEBGL SHADER BACKGROUND ART */}
@@ -99,17 +102,17 @@ export default function TraitGallery() {
                 {/* 2. TOP SECTION: ID, TAG, CATEGORY, & TITLE */}
                 <div className="relative z-10 space-y-1 pointer-events-none">
                   <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs text-neutral-400">{trait.id} // 05</span>
-                    <span className="border border-neutral-800 bg-neutral-900/90 px-3 py-1 font-mono text-[10px] tracking-wider uppercase text-neutral-300">
+                    <span className="font-mono text-[10px] sm:text-xs text-neutral-400">{trait.id} // 05</span>
+                    <span className="border border-neutral-800 bg-neutral-900/90 px-2 sm:px-3 py-1 font-mono text-[9px] sm:text-[10px] tracking-wider uppercase text-neutral-300">
                       {trait.tag}
                     </span>
                   </div>
 
-                  <div>
-                    <p className="font-mono text-[9px] tracking-widest text-neutral-400 uppercase">
+                  <div className="pt-2">
+                    <p className="font-mono text-[8px] sm:text-[9px] tracking-widest text-neutral-400 uppercase">
                       {trait.category}
                     </p>
-                    <h3 className="text-xl sm:text-2xl font-bold uppercase tracking-wide text-white">
+                    <h3 className="text-lg sm:text-2xl font-bold uppercase tracking-wide text-white">
                       {trait.title}
                     </h3>
                   </div>
@@ -117,30 +120,30 @@ export default function TraitGallery() {
 
                 {/* 3. CLICK-TO-REVEAL LORE OVERLAY */}
                 <div 
-                  className={`absolute inset-0 bg-black/95 backdrop-blur-md p-8 flex flex-col justify-between z-30 transition-all duration-300 ease-out ${
+                  className={`absolute inset-0 bg-black/95 backdrop-blur-md p-6 sm:p-8 flex flex-col justify-between z-30 transition-all duration-300 ease-out ${
                     isExpanded ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-full pointer-events-none'
                   }`}
                 >
                   <div className="flex items-center justify-between border-b border-neutral-800 pb-4">
-                    <span className="font-mono text-xs text-white uppercase tracking-widest">{trait.title}</span>
+                    <span className="font-mono text-[10px] sm:text-xs text-white uppercase tracking-widest">{trait.title}</span>
                     <span className="font-mono text-xs text-neutral-500">[ CLOSE ✕ ]</span>
                   </div>
 
                   <div className="my-auto space-y-3">
-                    <p className="font-mono text-xs text-neutral-400 tracking-wider uppercase">{trait.category}</p>
-                    <p className="text-sm leading-relaxed text-neutral-200 font-mono">
+                    <p className="font-mono text-[10px] sm:text-xs text-neutral-400 tracking-wider uppercase">{trait.category}</p>
+                    <p className="text-xs sm:text-sm leading-relaxed text-neutral-200 font-mono">
                       {trait.description}
                     </p>
                   </div>
 
-                  <div className="border-t border-neutral-800 pt-4 flex justify-between items-center font-mono text-[10px] text-neutral-500">
+                  <div className="border-t border-neutral-800 pt-4 flex justify-between items-center font-mono text-[9px] sm:text-[10px] text-neutral-500">
                     <span>VOID BUSTS PROTOCOL</span>
                     <span className="text-white">ACTIVE</span>
                   </div>
                 </div>
 
-                {/* 4. BOTTOM FOOTER LINE (Now houses the action prompt securely at the very bottom) */}
-                <div className="relative z-10 flex items-center justify-between border-t border-neutral-800/90 pt-3 font-mono text-[10px] text-neutral-400 pointer-events-none bg-black/40 backdrop-blur-xs -mx-6 -mb-6 p-4">
+                {/* 4. BOTTOM FOOTER LINE */}
+                <div className="absolute bottom-0 left-0 w-full z-10 flex items-center justify-between border-t border-neutral-800/90 py-4 px-6 sm:px-8 font-mono text-[10px] text-neutral-400 pointer-events-none bg-black/40 backdrop-blur-xs">
                   <span className="text-neutral-300 uppercase tracking-wider">
                     {isExpanded ? '[ CLOSE SPECS ]' : '[ CLICK TO VIEW SPECS ]'}
                   </span>

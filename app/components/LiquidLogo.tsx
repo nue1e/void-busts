@@ -2,7 +2,7 @@
 
 import * as THREE from 'three';
 import { useRef, useState } from 'react';
-import { useFrame } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
 import { useTexture } from '@react-three/drei';
 
 const vertexShader = `
@@ -23,19 +23,15 @@ const fragmentShader = `
   void main() {
     vec2 uv = vUv;
     
-    // 1. THE IDLE EFFECT (Always moving slightly)
-    // A gentle diagonal wave that runs continuously, mimicking ambient water
     float idleWaveX = sin(uv.y * 10.0 + uTime * 1.5) * 0.003;
     float idleWaveY = cos(uv.x * 10.0 + uTime * 1.5) * 0.003;
     vec2 idleDistortion = vec2(idleWaveX, idleWaveY);
 
-    // 2. THE HOVER EFFECT (Intense mouse interaction)
     float dist = distance(uv, uMouse);
     float rippleArea = smoothstep(0.4, 0.0, dist) * uHover;
     float hoverWave = sin(dist * 30.0 - uTime * 4.0) * 0.015 * rippleArea;
     vec2 hoverDistortion = normalize(uv - uMouse) * hoverWave;
     
-    // Combine the idle state and the interactive hover state
     vec2 distortedUv = uv + idleDistortion + hoverDistortion;
     
     vec4 tex = texture2D(uTexture, distortedUv);
@@ -51,8 +47,13 @@ export default function LiquidLogo({ imageUrl }: { imageUrl: string }) {
   const mouseRef = useRef(new THREE.Vector2(0.5, 0.5));
   const targetMouse = useRef(new THREE.Vector2(0.5, 0.5));
 
-  const planeWidth = 10;
-  const planeHeight = 1.2;
+  // useThree gives us the exact dimensions of the 3D viewport
+  const { viewport } = useThree();
+
+  // The base width of your logo is 10 units. 
+  // We want to ensure it never takes up more than 90% of the screen width (0.9 padding).
+  // Math.min(1, ...) ensures it doesn't scale UP larger than its original size on big desktops.
+  const scaleFactor = Math.min(1, (viewport.width * 0.9) / 10);
 
   useFrame((state) => {
     if (materialRef.current) {
@@ -71,6 +72,9 @@ export default function LiquidLogo({ imageUrl }: { imageUrl: string }) {
 
   return (
     <mesh
+      // We apply the dynamic scale here to the mesh. 
+      // It perfectly shrinks the width and height together on smaller screens!
+      scale={[scaleFactor, scaleFactor, 1]}
       onPointerOver={() => setHover(true)}
       onPointerOut={() => setHover(false)}
       onPointerMove={(e) => {
@@ -79,7 +83,8 @@ export default function LiquidLogo({ imageUrl }: { imageUrl: string }) {
         }
       }}
     >
-      <planeGeometry args={[planeWidth, planeHeight, 64, 64]} />
+      {/* We keep the original desktop geometry size constant */}
+      <planeGeometry args={[10, 1.2, 64, 64]} />
       <shaderMaterial
         ref={materialRef}
         vertexShader={vertexShader}

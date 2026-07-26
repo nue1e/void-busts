@@ -10,7 +10,7 @@ const vertexShader = `
   uniform vec2 uScale;
   
   void main() {
-    // We multiply the uv by uScale to fix the squishing and increase the size
+    // Multiply the uv by uScale to fix the squishing and maintain perfect squares
     vUv = uv * uScale; 
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
   }
@@ -20,18 +20,31 @@ const fragmentShader = `
   uniform sampler2D uTexture;
   uniform float uTime;
   uniform vec2 uMouse;
+  uniform vec2 uScale;
   varying vec2 vUv;
 
   void main() {
     // 1. INFINITE PANNING
     vec2 panningUv = vUv + vec2(uTime * 0.05, uTime * 0.03);
     
-    // 2. MOUSE WARP
-    float dist = distance(fract(vUv), uMouse);
-    float warpEffect = smoothstep(0.6, 0.0, dist) * 0.05;
-    vec2 mouseWarp = (fract(vUv) - uMouse) * warpEffect;
+    // 2. TRUE MOUSE WARP
+    // Map the -1 to 1 global mouse coordinates into our scaled 3D plane space.
+    // The plane is 2x the viewport size, so the visible screen spans from UV 0.25 to 0.75.
+    vec2 planeMouseUv = vec2(0.5 + (uMouse.x * 0.25), 0.5 + (uMouse.y * 0.25));
+    
+    // Multiply by uScale so it matches vUv's coordinate system perfectly
+    vec2 trueMouse = planeMouseUv * uScale;
 
+    // Compare the true global vUv to the true scaled mouse position
+    float dist = distance(vUv, trueMouse);
+    
+    // Increased the warp radius (1.5) since we are working in scaled world space now
+    float warpEffect = smoothstep(1.5, 0.0, dist) * 0.15;
+    vec2 mouseWarp = normalize(vUv - trueMouse) * warpEffect;
+
+    // Add warp to the panning UV, THEN fract to create the repeating grid tiles
     vec2 finalUv = fract(panningUv + mouseWarp);
+    
     vec4 texColor = texture2D(uTexture, finalUv);
     
     // 3. DIM THE VOID
@@ -48,13 +61,11 @@ export default function GridBackground() {
   const texture = useTexture('/assets/grid_1111.png') as THREE.Texture;
   texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
 
-  const targetMouse = useRef(new THREE.Vector2(0.5, 0.5));
-  const currentMouse = useRef(new THREE.Vector2(0.5, 0.5));
+  // Initialize mouse off-screen so the warp doesn't start in the dead center
+  const targetMouse = useRef(new THREE.Vector2(999.0, 999.0));
+  const currentMouse = useRef(new THREE.Vector2(999.0, 999.0));
 
-  // This calculates the correct scale to keep the grid perfectly square
   const scale = useMemo(() => {
-    // ZOOM CONTROL: Decrease this number to make the arts LARGER. 
-    // Increase it to make them smaller. (1.2 is a solid starting point)
     const zoomLevel = 1.2; 
     
     return new THREE.Vector2(
@@ -67,21 +78,18 @@ export default function GridBackground() {
     if (materialRef.current) {
       materialRef.current.uniforms.uTime.value = state.clock.elapsedTime;
       
+      // state.pointer tracks the mouse globally regardless of what HTML is in front of it.
+      // It returns values from -1 to 1.
+      targetMouse.current.set(state.pointer.x, state.pointer.y);
       currentMouse.current.lerp(targetMouse.current, 0.05);
+      
       materialRef.current.uniforms.uMouse.value = currentMouse.current;
     }
   });
 
   return (
-    <mesh 
-      position={[0, 0, -2]} 
-      onPointerMove={(e) => {
-        if (e.uv) {
-          targetMouse.current.set(e.uv.x, e.uv.y);
-        }
-      }}
-    >
-      {/* Increased the geometry size slightly to ensure the corners don't clip while panning */}
+    <mesh position={[0, 0, -2]}>
+      {/* Plane is 2x the viewport to ensure corners don't clip while panning */}
       <planeGeometry args={[viewport.width * 2, viewport.height * 2, 32, 32]} />
       <shaderMaterial
         ref={materialRef}
@@ -90,8 +98,8 @@ export default function GridBackground() {
         uniforms={{
           uTexture: { value: texture },
           uTime: { value: 0.0 },
-          uMouse: { value: new THREE.Vector2(0.5, 0.5) },
-          uScale: { value: scale } // Passing our square aspect ratio fix to the shader
+          uMouse: { value: new THREE.Vector2(999.0, 999.0) },
+          uScale: { value: scale }
         }}
         depthWrite={false}
       />
