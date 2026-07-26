@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Canvas } from '@react-three/fiber';
 import BustShaderCard from './BustShaderCard';
@@ -50,21 +50,38 @@ const traits = [
 
 export default function TraitGallery() {
   const targetRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null); // New ref to measure the scrolling track
+  const [scrollRange, setScrollRange] = useState(0);
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
   
   const { scrollYProgress } = useScroll({
     target: targetRef,
   });
 
-  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-75%"]);
+  // Calculate the exact pixel distance the track needs to move
+  useEffect(() => {
+    const updateRange = () => {
+      if (trackRef.current) {
+        const trackWidth = trackRef.current.scrollWidth;
+        const viewportWidth = window.innerWidth;
+        setScrollRange(trackWidth - viewportWidth);
+      }
+    };
+
+    updateRange();
+    window.addEventListener('resize', updateRange);
+    return () => window.removeEventListener('resize', updateRange);
+  }, []);
+
+  // Map progress to the exact calculated pixel range
+  const x = useTransform(scrollYProgress, [0, 1], [0, -scrollRange]);
 
   const toggleCard = (id: string) => {
     setActiveCardId(activeCardId === id ? null : id);
   };
 
   return (
-    <section ref={targetRef} className="relative h-[300vh] text-white bg-transparent">
-      {/* Changed to h-[100dvh] for perfect mobile/tablet containment */}
+    <section ref={targetRef} className="relative h-[300vh] text-white bg-transparent touch-pan-y">
       <div className="sticky top-0 flex h-[100dvh] flex-col justify-center overflow-hidden">
         
         {/* Section Header */}
@@ -77,9 +94,13 @@ export default function TraitGallery() {
           </h2>
         </div>
 
-        {/* Horizontal Sliding Cards Track 
-            Added mt-24 to push it down away from the header on smaller screens */}
-        <motion.div style={{ x }} className="flex gap-6 pl-6 sm:gap-8 sm:pl-8 md:gap-12 md:pl-14 pr-[20vw] mt-24 md:mt-32">
+        {/* Horizontal Sliding Cards Track */}
+        <motion.div 
+          ref={trackRef} 
+          style={{ x }} 
+          // Replaced pr-[20vw] with symmetrical padding (px-...) and added w-max to ensure correct measurement
+          className="flex w-max gap-6 px-6 sm:gap-8 sm:px-8 md:gap-12 md:px-14 mt-24 md:mt-32 will-change-transform"
+        >
           {traits.map((trait) => {
             const isExpanded = activeCardId === trait.id;
 
@@ -87,7 +108,6 @@ export default function TraitGallery() {
               <div
                 key={trait.id}
                 onClick={() => toggleCard(trait.id)}
-                // Adjusted responsive widths: Mobile gets 85vw, Tablets get 45vw, Desktop gets max 420px
                 className="group relative flex aspect-square w-[85vw] sm:w-[45vw] md:w-[40vw] lg:w-[30vw] max-w-[420px] flex-col justify-between border border-neutral-800 bg-neutral-950 p-6 sm:p-8 cursor-pointer overflow-hidden transition-all duration-300 hover:border-white/50 shrink-0 shadow-2xl"
               >
                 
