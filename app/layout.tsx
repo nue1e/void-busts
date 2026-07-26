@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   title: "Void Busts",
   description: "Official Void Busts Site",
   icons: {
-    icon: "/assets/logo-crest.png",
+    icon: "/favicon.ico",
   },
 };
 
