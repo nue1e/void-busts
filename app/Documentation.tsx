@@ -49,32 +49,41 @@ export default function Documentation() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-neutral-900 text-neutral-300">
-                <tr><td className="p-3 sm:p-4 font-bold text-white">A</td><td className="p-3 sm:p-4 text-lg">◮</td><td className="p-3 sm:p-4">Hollow triangle with vertical center-split line</td></tr>
+                <tr><td className="p-3 sm:p-4 font-bold text-white">A</td><td className="p-3 sm:p-4 text-lg">◮</td><td className="p-3 sm:p-4">Triangle with a hollow left half and solid right half</td></tr>
                 <tr><td className="p-3 sm:p-4 font-bold text-white">B</td><td className="p-3 sm:p-4 text-lg">▛</td><td className="p-3 sm:p-4">Brutalist upper-left frame block</td></tr>
                 <tr><td className="p-3 sm:p-4 font-bold text-white">C</td><td className="p-3 sm:p-4 text-lg">◧</td><td className="p-3 sm:p-4">Solid square with hollow left-aligned inner cutout</td></tr>
                 <tr><td className="p-3 sm:p-4 font-bold text-white">D</td><td className="p-3 sm:p-4 text-lg">◨</td><td className="p-3 sm:p-4">Solid square with hollow right-aligned inner cutout</td></tr>
-                <tr><td className="p-3 sm:p-4 font-bold text-white">E</td><td className="p-3 sm:p-4 text-lg">▤</td><td className="p-3 sm:p-4">Five horizontal parallel bars</td></tr>
-                <tr><td className="p-3 sm:p-4 font-bold text-white">F</td><td className="p-3 sm:p-4 text-lg">▦</td><td className="p-3 sm:p-4">Dense architectural cross-grid matrix</td></tr>
-                <tr><td className="p-3 sm:p-4 font-bold text-white">G</td><td className="p-3 sm:p-4 text-lg">◪</td><td className="p-3 sm:p-4">Solid square with a bottom-left diagonal cut</td></tr>
-                <tr><td className="p-3 sm:p-4 font-bold text-white">H</td><td className="p-3 sm:p-4 text-lg">▚</td><td className="p-3 sm:p-4">Two small offset square pixels (top-left, bottom-right)</td></tr>
+                <tr><td className="p-3 sm:p-4 font-bold text-white">E</td><td className="p-3 sm:p-4 text-lg">▤</td><td className="p-3 sm:p-4">Four horizontal parallel bars</td></tr>
+                <tr><td className="p-3 sm:p-4 font-bold text-white">F</td><td className="p-3 sm:p-4 text-lg">▦</td><td className="p-3 sm:p-4">4x4 dense architectural cross-grid matrix</td></tr>
+                <tr><td className="p-3 sm:p-4 font-bold text-white">G</td><td className="p-3 sm:p-4 text-lg">◪</td><td className="p-3 sm:p-4">Solid square missing the top-right half diagonally</td></tr>
+                <tr>
+                  <td className="p-3 sm:p-4 font-bold text-white">H</td>
+                  <td className="p-3 sm:p-4 text-lg">
+                    <span className="inline-block relative w-4 h-4 align-middle">
+                      <span className="absolute top-0 left-0 w-1.5 h-3 bg-white"></span>
+                      <span className="absolute bottom-0 right-0 w-1.5 h-3 bg-white"></span>
+                    </span>
+                  </td>
+                  <td className="p-3 sm:p-4">Two elongated, offset vertical rectangles (top-left and bottom-right)</td>
+                </tr>
                 <tr><td className="p-3 sm:p-4 font-bold text-white">I</td><td className="p-3 sm:p-4 text-lg">❙</td><td className="p-3 sm:p-4">Thick vertical monolithic bar</td></tr>
-                <tr><td className="p-3 sm:p-4 font-bold text-white">J</td><td className="p-3 sm:p-4 text-lg">▘</td><td className="p-3 sm:p-4">Solid square with missing top-right quarter cutout</td></tr>
-                <tr><td className="p-3 sm:p-4 font-bold text-white">K</td><td className="p-3 sm:p-4 text-lg">◢</td><td className="p-3 sm:p-4">Hollow triangle with a solid right half</td></tr>
-                <tr><td className="p-3 sm:p-4 font-bold text-white">L</td><td className="p-3 sm:p-4 text-lg">▰</td><td className="p-3 sm:p-4">Solid floating single pixel block</td></tr>
+                <tr><td className="p-3 sm:p-4 font-bold text-white">J</td><td className="p-3 sm:p-4 text-lg">▙</td><td className="p-3 sm:p-4">Solid square with missing top-right quarter cutout</td></tr>
+                <tr><td className="p-3 sm:p-4 font-bold text-white">K</td><td className="p-3 sm:p-4 text-lg">△</td><td className="p-3 sm:p-4">Hollow triangle with a thick uniform border</td></tr>
+                <tr><td className="p-3 sm:p-4 font-bold text-white">L</td><td className="p-3 sm:p-4 text-lg">▘</td><td className="p-3 sm:p-4">Equal square etched up to the upper position</td></tr>
                 <tr><td className="p-3 sm:p-4 font-bold text-white">M</td><td className="p-3 sm:p-4 text-lg">▰</td><td className="p-3 sm:p-4">Slanted solid parallelogram leaning right</td></tr>
                 <tr><td className="p-3 sm:p-4 font-bold text-white">N</td><td className="p-3 sm:p-4 text-lg">▱</td><td className="p-3 sm:p-4">Hollow parallelogram framing wireframe</td></tr>
                 <tr><td className="p-3 sm:p-4 font-bold text-white">O</td><td className="p-3 sm:p-4 text-lg">⎔</td><td className="p-3 sm:p-4">Pure hollow regular hexagon</td></tr>
-                <tr><td className="p-3 sm:p-4 font-bold text-white">P</td><td className="p-3 sm:p-4 text-lg">▜</td><td className="p-3 sm:p-4">Thick upper-right frame block</td></tr>
-                <tr><td className="p-3 sm:p-4 font-bold text-white">Q</td><td className="p-3 sm:p-4 text-lg">◩</td><td className="p-3 sm:p-4">Solid square with elongated bottom-right diagonal cut</td></tr>
+                <tr><td className="p-3 sm:p-4 font-bold text-white">P</td><td className="p-3 sm:p-4 text-lg">▜</td><td className="p-3 sm:p-4">Solid square missing the bottom-left quadrant</td></tr>
+                <tr><td className="p-3 sm:p-4 font-bold text-white">Q</td><td className="p-3 sm:p-4 text-lg">◩</td><td className="p-3 sm:p-4">Solid square missing the top-left half diagonally</td></tr>
                 <tr><td className="p-3 sm:p-4 font-bold text-white">R</td><td className="p-3 sm:p-4 text-lg">▞</td><td className="p-3 sm:p-4">Two small offset square pixels (bottom-left, top-right)</td></tr>
-                <tr><td className="p-3 sm:p-4 font-bold text-white">S</td><td className="p-3 sm:p-4 text-lg">▞</td><td className="p-3 sm:p-4">Diagonal twin pixel block (Identical structure to R)</td></tr>
+                <tr><td className="p-3 sm:p-4 font-bold text-white">S</td><td className="p-3 sm:p-4 text-lg">▚</td><td className="p-3 sm:p-4">Two small offset square pixels (top-left, bottom-right)</td></tr>
                 <tr><td className="p-3 sm:p-4 font-bold text-white">T</td><td className="p-3 sm:p-4 text-lg">⊤</td><td className="p-3 sm:p-4">Clean architectural T-square intercept bar</td></tr>
                 <tr><td className="p-3 sm:p-4 font-bold text-white">U</td><td className="p-3 sm:p-4 text-lg">⊔</td><td className="p-3 sm:p-4">Three-sided square U-channel frame</td></tr>
                 <tr><td className="p-3 sm:p-4 font-bold text-white">V</td><td className="p-3 sm:p-4 text-lg">▼</td><td className="p-3 sm:p-4">Solid inverted downward-pointing triangle</td></tr>
                 <tr><td className="p-3 sm:p-4 font-bold text-white">W</td><td className="p-3 sm:p-4 text-lg">◰</td><td className="p-3 sm:p-4">Solid rectangle enclosing a hollow top-left corner box</td></tr>
                 <tr><td className="p-3 sm:p-4 font-bold text-white">X</td><td className="p-3 sm:p-4 text-lg">⛝</td><td className="p-3 sm:p-4">Bounding square containing a four-point hourglass matrix</td></tr>
-                <tr><td className="p-3 sm:p-4 font-bold text-white">Y</td><td className="p-3 sm:p-4 text-lg">⑂</td><td className="p-3 sm:p-4">Three-pronged mechanical fork</td></tr>
-                <tr><td className="p-3 sm:p-4 font-bold text-white">Z</td><td className="p-3 sm:p-4 text-lg">▤̸</td><td className="p-3 sm:p-4">Five horizontal bars slashed by diagonal strikethrough</td></tr>
+                <tr><td className="p-3 sm:p-4 font-bold text-white">Y</td><td className="p-3 sm:p-4 text-lg">⑂</td><td className="p-3 sm:p-4">Mechanical tuning-fork with a central stem</td></tr>
+                <tr><td className="p-3 sm:p-4 font-bold text-white">Z</td><td className="p-3 sm:p-4 text-lg">▤̸</td><td className="p-3 sm:p-4">Four horizontal bars slashed by diagonal strikethrough</td></tr>
               </tbody>
             </table>
           </div>
