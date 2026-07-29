@@ -6,6 +6,7 @@ import GridBackground from './components/GridBackground';
 import TraitGallery from './components/TraitGallery';
 import Documentation from './Documentation';
 import Footer from './components/Footer';
+import RoadmapFAQ from './components/RoadmapFAQ';
 import { useState, useEffect } from 'react';
 
 export default function Home() {
@@ -143,7 +144,12 @@ export default function Home() {
         <Documentation />
       </div>
 
-      {/* 5. MAIN SITE FOOTER */}
+      {/* 5. ROADMAP, TEAM & FAQ */}
+      <div style={{ position: 'relative', zIndex: 10 }}>
+        <RoadmapFAQ />
+      </div>
+
+      {/* 6. MAIN SITE FOOTER */}
       <div style={{ position: 'relative', zIndex: 10 }}>
         <Footer />
       </div>
